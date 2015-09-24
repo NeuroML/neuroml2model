@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0">
+
+    <ComponentType name="Base"/>
+
+    <ComponentType name="Bar" extends="Base" >
+    	<Requirement name="pFoo"/>
+        <Parameter name="pBar"/>
+        <DerivedParameter name="dpBar" value="pFoo/pBar"/>
+    </ComponentType>
+
+    <ComponentType name="Baz" extends="Bar">
+        <Parameter name="pBaz"/>
+    </ComponentType>
+
+    <ComponentType name="Gar" extends="Base">
+    </ComponentType>
+
+    <ComponentType name="Foo" extends="Base">
+        <Parameter name="pFoo"/>
+        <Child type="Bar" name="fooBar"/>
+        <Children type="Baz" name="fooBazs"/>
+    </ComponentType>
+
+    <ComponentType name="Goo" extends="Base">
+        <Children type="Baz" name="gooBazs"/>
+        <Children type="Gar" name="gooGars"/>
+    </ComponentType>
+
+</Lems>

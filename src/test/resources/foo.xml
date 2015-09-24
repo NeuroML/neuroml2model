@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FooML>
+    <Foo id="foo0" pFoo="1">
+        <Bar id="fooBar" pBar="10"/>
+        <Baz id="baz0InFoo" pBaz="0" pBar="0"/>
+        <Baz id="baz1InFoo" pBaz="1" pBar="1"/>
+    </Foo>
+    <Baz id="baz0" pBaz="100" pBar="1000"/>
+    <Goo id="goo0">
+        <Gar id="gar0InGoo" pGar="0"/>
+        <Gar id="gar1InGoo" pGar="1"/>
+        <Baz id="baz0InGoo" pBaz="0" pBar="0"/>
+        <Baz id="baz1InGoo" pBaz="1" pBar="1"/>
+    </Goo>
+</FooML>
