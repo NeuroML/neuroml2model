@@ -1,4 +1,4 @@
-package org.testml;
+package org.neuroml2.model;
 /**
  * Hello world!
  *

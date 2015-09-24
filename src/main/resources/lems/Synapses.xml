@@ -1,6 +1,6 @@
-<Lems xmlns="http://www.neuroml.org/lems/0.7.3"
+<Lems xmlns="http://www.neuroml.org/lems/0.9.0"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.neuroml.org/lems/0.7.3 ../../LEMS/Schemas/LEMS/LEMS_v0.7.3.xsd"
+      xsi:schemaLocation="http://www.neuroml.org/lems/0.9.0"
       description="A number of synaptic ComponentTypes for use in NeuroML 2 documents. These generally extend the _baseSynapse_ ComponentType.">
 
 
@@ -80,7 +80,7 @@
 
         <Parameter name="tauRise" dimension="time" />
         <Parameter name="tauDecay" dimension="time" />
-        
+
         <DerivedParameter name="peakTime" dimension="time" value="log(tauDecay / tauRise) * (tauRise * tauDecay)/(tauDecay - tauRise)"/>
         <DerivedParameter name="waveformFactor" dimension="none" value="1 / (-exp(-peakTime / tauRise) + exp(-peakTime / tauDecay))"/>
 
@@ -210,7 +210,7 @@
         </Structure>
 
     </ComponentType>
-    
+
 
     <ComponentType name="blockingPlasticSynapse"
                    extends="expTwoSynapse"
@@ -218,10 +218,10 @@
 				optional block and plasticity
 				mechanisms, which can be expressed as
 				child elements.">
-        
+
         <Children name="plasticityMechanisms" type="basePlasticityMechanism"/>
         <Children name="blockMechanisms" type="baseBlockMechanism"/>
-        
+
         <EventPort name="relay" direction="out" description="Used to relay incoming spikes to child plasticity mechanism"/>
         <Dynamics>
             <StateVariable name="A" dimension="none"/>
@@ -230,11 +230,11 @@
             <DerivedVariable name="plasticityFactor" dimension="none"
                              select="plasticityMechanisms[*]/plasticityFactor"
                              reduce="multiply"/>
-            
+
             <DerivedVariable name="blockFactor" dimension="none"
                              select="blockMechanisms[*]/blockFactor"
                              reduce="multiply"/>
-            
+
             <DerivedVariable name="g" dimension="conductance" exposure="g"
                              value="blockFactor * gbase * (B - A)" />
             <DerivedVariable name="i" exposure="i" dimension="current"
@@ -307,16 +307,16 @@
         </Dynamics>
 
     </ComponentType>
-    
-    
+
+
     <ComponentType name="gapJunction"
                    extends="baseSynapse"
                    description="Gap junction/single electrical connection, NOTE: STILL IN DEVELOPMENT!!!!">
-        
+
         <Parameter name="conductance" dimension="conductance"/>
-        
+
         <Exposure name="i" dimension="current"/>
-        
+
         <Requirement name="v" dimension="voltage"/>
 
         <InstanceRequirement name="peer" type="gapJunction"/>
@@ -326,14 +326,14 @@
             <DerivedVariable name="i" exposure="i"  value="conductance * (vpeer - v)"/>
         </Dynamics>
     </ComponentType>
-    
+
     <!--
     <ComponentType name="silentEndpoint"
                    extends="baseSynapse"
                    description="STILL IN DEVELOPMENT!!!!">
-        
+
         <Exposure name="i" dimension="current"/>
-        
+
         <Requirement name="v" dimension="voltage"/>
 
         <InstanceRequirement name="peer" type="gapJunction"/>
@@ -342,18 +342,18 @@
             <DerivedVariable name="vpeer" dimension="voltage" select="peer/v"/>
             <DerivedVariable name="i" exposure="i"  value="v-v"/>
         </Dynamics>
-        
+
     </ComponentType>
-    
-    
+
+
     <ComponentType name="gradedSynapse"
                    extends="baseSynapse"
                    description="STILL IN DEVELOPMENT!!!!">
-        
+
         <Parameter name="conductance" dimension="conductance"/>
-        
+
         <Exposure name="i" dimension="current"/>
-        
+
         <Requirement name="v" dimension="voltage"/>
 
         <InstanceRequirement name="peer" type="gapJunction"/>
