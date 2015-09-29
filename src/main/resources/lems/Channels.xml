@@ -210,7 +210,7 @@
                    extends="baseGate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -254,7 +254,7 @@
                    extends="baseGate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
 
         <Child name="timeCourse" type="baseVoltageDepTime" />
         <Child name="steadyState" type="baseVoltageDepVariable" />
@@ -291,7 +291,7 @@
                    extends="baseGate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -335,7 +335,7 @@
                    extends="baseGate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -375,7 +375,7 @@
                    extends="baseGate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -425,8 +425,8 @@
     <ComponentType name="ionChannelPassive"
                    extends="ionChannel"
                    description="Simple passive ion channel where the constant conductance through the channel is equal to _conductance">
-        <Child name="notes" type="notes"/>
-        <Child name="annotation" type="annotation"/>
+        <Children name="notes" type="notes"/>
+        <Children name="annotation" type="annotation"/>
         <Text name="neuroLexId"/>
 
         <Dynamics>
@@ -439,8 +439,8 @@
     <ComponentType name="ionChannelHH"
                    extends="baseIonChannel"
                    description="Note _ionChannel_ and _ionChannelHH_ are currently functionally identical. This is needed since many existing examples use ionChannel, some use ionChannelHH. NeuroML v2beta4 should remove one of these, probably ionChannelHH.">
-        <Child name="notes" type="notes"/>
-        <Child name="annotation" type="annotation"/>
+        <Children name="notes" type="notes"/>
+        <Children name="annotation" type="annotation"/>
 
         <Children name="conductanceScaling" type="baseConductanceScaling"/>
         <Children name="gatesHHrates" type="gateHHrates"/>
@@ -485,7 +485,7 @@
     <ComponentType name="KSState"
                    description="One of the states in which a _gateKS_ can be. The rates of transitions between these states are given by _KSTransition_s">
         <Parameter name="relativeConductance" dimension="none"/>
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
         <Exposure name="occupancy" dimension="none"/>
         <Exposure name="q" dimension="none"/>
 

@@ -13,7 +13,7 @@
 
     <ComponentType name="baseCell"
         description="Base type of any cell which can be used in a population">
-        <Child name="notes" type="notes"/>
+        <Children name="notes" type="notes"/>
     </ComponentType>
 
 
@@ -447,9 +447,9 @@
         description="A segment defines the smallest unit within a possibly branching structure (_morphology_), such as a dendrite or axon. The shape is given by the _proximal_ and _distal_ points. If _proximal_ is missing, the proximal point is assumed to be the _distal_ point of the parent. _parent_ specifies the parent segment. The first segment (no _parent_) usually represents the soma. NOTE: LEMS does not yet support multicompartmental modelling, so the Dynamics here is only appropriate for single compartment modelling. ">
 
         <Constant name="LEN" dimension="length" value="1m"/>
-        <Child name="parent" type="parent"/>
-        <Child name="distal" type="distal"/>
-        <Child name="proximal" type="proximal"/>
+        <Children name="parent" type="parent" max="1"/>
+        <Children name="distal" type="distal" max="1"/>
+        <Children name="proximal" type="proximal" max="1"/>
 
         <Exposure name="surfaceArea" dimension="area"/>
         <Exposure name="radDist" dimension="length"/>
@@ -484,9 +484,9 @@
 
     <ComponentType name="segmentGroup" description="A method to describe a group of _segment_s in a _morphology_">
 
-        <Child name="notes" type="notes"/>
-        <Child name="property" type="property"/>
-        <Child name="annotation" type="annotation"/>
+        <Children name="notes" type="notes"/>
+        <Children name="property" type="property"/>
+        <Children name="annotation" type="annotation"/>
         <Children name="members" type="member"/>
         <Children name="paths" type="path"/>
         <Children name="subTrees" type="subTree"/>
@@ -799,8 +799,8 @@
         extends="baseCellMembPot"
         description="Cell with _segment_s specified in a _morphology_ element along with details on its _biophysicalProperties_. NOTE: this can only be correctly simulated using LEMS when there is a single segment in the cell, and _v of this cell represents the membrane potential in that isopotential segment!!!">
 
-        <Child name="notes" type="notes"/>
-        <Child name="annotation" type="annotation"/>
+        <Children name="notes" type="notes"/>
+        <Children name="annotation" type="annotation"/>
 
         <Child name="morphology" type="morphology"/>
 
