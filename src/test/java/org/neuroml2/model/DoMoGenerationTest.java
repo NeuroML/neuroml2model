@@ -3,15 +3,24 @@ package org.neuroml2.model;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.List;
 
 import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
+import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+
+import com.google.common.base.Charsets;
+import com.google.common.io.Files;
 
 public class DoMoGenerationTest {
 
@@ -29,8 +38,8 @@ public class DoMoGenerationTest {
 
 		jaxbContext = JAXBContext.newInstance("org.neuroml2.model");
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		Neuroml2 hh = (Neuroml2) jaxbUnmarshaller.unmarshal(model);
-		//TODO: ideal way of doing that?
+		hh = (Neuroml2) jaxbUnmarshaller.unmarshal(model);
+		// TODO: ideal way of doing that?
 		hh.getComponentTypes().addAll(domainDefs.getComponentTypes());
 		hh.getUnits().addAll(domainDefs.getUnits());
 		hh.getConstants().addAll(domainDefs.getConstants());
@@ -41,7 +50,7 @@ public class DoMoGenerationTest {
 	@Test
 	public void testGeneration() {
 
-		assertEquals(6, domainDefs.getComponentTypes().size());
+		assertEquals(172, domainDefs.getComponentTypes().size());
 	}
 
 	// @Test
@@ -92,30 +101,44 @@ public class DoMoGenerationTest {
 	// .evaluate("dpBar").getValue().doubleValue(), 1e-12);
 	// }
 	//
-	// @Test
-	// public void testMarshalling()
-	// throws JAXBException, PropertyException, IOException {
-	//
-	// File tmpFile = File.createTempFile("test", ".xml");
-	// Marshaller marshaller = jaxbContext.createMarshaller();
-	// marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-	//
-	// fooModel.getComponentTypes().clear();
-	// eraseTypes(fooModel.getComponents()); //TODO: extremely ugly hack
-	//
-	// marshaller.marshal(fooModel, tmpFile);
-	// System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
-	// }
-	//
-	// //TODO: argh! @XmlTransient in ext.Comp isn't overriding type from
-	// (on-ext)Comp
-	// void eraseTypes(List<Component> list){
-	// for(Component comp : list){
-	// eraseTypes(comp.getComponent());
-	// comp.withType(null);
-	// }
-	//
-	// }
+	@Test
+	public void testMarshalling() throws JAXBException, PropertyException,
+			IOException {
+
+		File tmpFile = File.createTempFile("test", ".xml");
+		Marshaller marshaller = jaxbContext.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+
+		hh.getComponentTypes().clear();
+		eraseTypes(hh.getComponents()); // TODO: extremely ugly hack
+		eraseUnits(hh); // TODO: extremely ugly hack
+		eraseDimensions(hh); // TODO: extremely ugly hack
+		eraseDeReferences(hh);
+
+		marshaller.marshal(hh, tmpFile);
+		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
+	}
+
+	private void eraseDeReferences(Neuroml2 hh2) {
+		// TODO Auto-generated method stub
+
+	}
+
+	// TODO: argh! @XmlTransient in ext.Comp isn't overriding type from
+	//       (un-ext)Comp
+	void eraseTypes(List<Component> list) {
+		for (Component comp : list) {
+			eraseTypes(comp.getComponent());
+			comp.withType(null);
+		}
+	}
+	void eraseUnits(Neuroml2 model) {
+		model.getUnits().clear();
+	}
+
+	void eraseDimensions(Neuroml2 model) {
+        model.getDimensions().clear();
+	}
 
 	protected File getLocalFile(String fname) {
 		return new File(getClass().getResource(fname).getFile());
