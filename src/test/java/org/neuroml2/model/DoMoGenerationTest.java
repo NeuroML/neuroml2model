@@ -1,6 +1,7 @@
 package org.neuroml2.model;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,10 +15,13 @@ import javax.xml.bind.Unmarshaller;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.lemsml.model.ComponentReference;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
+import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.interfaces.HasComponents;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
@@ -53,20 +57,21 @@ public class DoMoGenerationTest {
 		assertEquals(172, domainDefs.getComponentTypes().size());
 	}
 
-	// @Test
-	// public void testTypes() throws LEMSCompilerException {
-	// assertEquals(1, fooModel.getFoos().size());
-	// assertEquals(0, fooModel.getBars().size());
-	// assertEquals(6, fooModel.getAllOfType(Bar.class).size());
-	// assertEquals(5, fooModel.getAllOfType(Baz.class).size());
-	// assertEquals(10, fooModel.getAllOfType(Base.class).size());
-	//
-	// Foo foo0 = (Foo) fooModel.getComponentById("foo0");
-	//
-	// assertTrue(fooModel.getAllOfType(Foo.class).contains(foo0));
-	// assertEquals(2, foo0.getFooBazs().size());
-	// assertEquals("10", foo0.getFooBar().getParameterValue("pBar"));
-	// }
+	@Test
+	public void testTypes() throws LEMSCompilerException {
+		assertEquals(1, hh.getCells().size());
+		assertEquals(0, hh.getIonChannels().size());
+		assertEquals(3, hh.getIonChannelHHs().size());
+		assertEquals(3, hh.getAllOfType(BaseIonChannel.class).size());
+		assertEquals(6, hh.getAllOfType(BaseVoltageDepRate.class).size());
+
+		Cell cell = (Cell) hh.getComponentById("hhcell");
+
+		assertTrue(hh.getAllOfType(Cell.class).contains(cell));
+		assertEquals(3, cell.getBiophysicalProperties().getMembraneProperties().getChannelDensities().size());
+		assertEquals("-65mV", cell.getBiophysicalProperties().getMembraneProperties().getInitMembPotential().getParameterValue("value"));
+	}
+
 	//
 	// @Test
 	// public void testEvaluation() throws LEMSCompilerException {
@@ -113,31 +118,38 @@ public class DoMoGenerationTest {
 		eraseTypes(hh.getComponents()); // TODO: extremely ugly hack
 		eraseUnits(hh); // TODO: extremely ugly hack
 		eraseDimensions(hh); // TODO: extremely ugly hack
-		eraseDeReferences(hh);
+		eraseDeReferences(hh);// TODO: extremely ugly hack
 
 		marshaller.marshal(hh, tmpFile);
 		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
 	}
 
-	private void eraseDeReferences(Neuroml2 hh2) {
-		// TODO Auto-generated method stub
-
+	private void eraseDeReferences(HasComponents comp) {
+		for (Component subComp : comp.getComponents()) {
+			for (ComponentReference ref : subComp.getComponentType()
+					.getComponentReferences()) {
+				subComp.getComponents().removeAll(
+						subComp.getSubComponentsBoundToName(ref.getName()));
+			}
+			eraseDeReferences(subComp);
+		}
 	}
 
 	// TODO: argh! @XmlTransient in ext.Comp isn't overriding type from
-	//       (un-ext)Comp
+	// (un-ext)Comp
 	void eraseTypes(List<Component> list) {
 		for (Component comp : list) {
 			eraseTypes(comp.getComponent());
 			comp.withType(null);
 		}
 	}
+
 	void eraseUnits(Neuroml2 model) {
 		model.getUnits().clear();
 	}
 
 	void eraseDimensions(Neuroml2 model) {
-        model.getDimensions().clear();
+		model.getDimensions().clear();
 	}
 
 	protected File getLocalFile(String fname) {
