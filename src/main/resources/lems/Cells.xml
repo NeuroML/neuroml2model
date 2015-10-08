@@ -60,7 +60,7 @@
         <Parameter name="number" dimension="none"/>
         <Parameter name="erev" dimension="voltage"/>
 
-        <ComponentReference name="ionChannel" type="baseIonChannel"/>
+<!--         <ComponentReference name="ionChannel" type="baseIonChannel"/> -->
 
         <Text name="ion"/> <!-- TODO: Ideally this needs to be a property of ionChannel only! But it's here as it makes it easier to select channelPopulations transmitting specific ions...-->
 
@@ -87,7 +87,7 @@
         <Constant name="zCa" dimension="none" value="2" description="TODO: Make this a global constant!"/>
         <Constant name="F" dimension="charge_per_mole" value="96485.3 C_per_mol" description="TODO: Make this a global constant!"/>
 
-        <ComponentReference name="ionChannel" type="baseIonChannel"/>
+<!--         <ComponentReference name="ionChannel" type="baseIonChannel"/> -->
 
         <Exposure name="erev" dimension="voltage"/> <!-- Calculated from caConcExt and caConc-->
 
@@ -251,7 +251,7 @@
         <Constant name="zCa" dimension="none" value="2" description="TODO: Make this a global constant!"/>
         <Constant name="F" dimension="charge_per_mole" value="96485.3 C_per_mol" description="TODO: Make this a global constant!"/>
 
-        <ComponentReference name="ionChannel" type="baseIonChannel"/>
+<!--         <ComponentReference name="ionChannel" type="baseIonChannel"/> -->
 
         <Exposure name="erev" dimension="voltage"/> <!-- Calculated from caConcExt and caConc-->
 
@@ -304,7 +304,7 @@
         <Constant name="zCa" dimension="none" value="2" description="TODO: Make this a global constant!"/>
         <Constant name="F" dimension="charge_per_mole" value="96485.3 C_per_mol" description="TODO: Make this a global constant!"/>
 
-        <ComponentReference name="ionChannel" type="baseIonChannel"/>
+<!--         <ComponentReference name="ionChannel" type="baseIonChannel"/> -->
 
         <Requirement name="temperature" dimension="temperature"/>
         <Requirement name="caConc" dimension="concentration"/>
