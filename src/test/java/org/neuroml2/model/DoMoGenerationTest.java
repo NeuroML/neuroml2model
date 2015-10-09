@@ -68,44 +68,47 @@ public class DoMoGenerationTest {
 		Cell cell = (Cell) hh.getComponentById("hhcell");
 
 		assertTrue(hh.getAllOfType(Cell.class).contains(cell));
-		assertEquals(3, cell.getBiophysicalProperties().getMembraneProperties().getChannelDensities().size());
-		assertEquals("-65mV", cell.getBiophysicalProperties().getMembraneProperties().getInitMembPotential().getParameterValue("value"));
+		assertEquals(3, cell.getBiophysicalProperties().getMembraneProperties()
+				.getChannelDensities().size());
+		assertEquals("-65mV", cell.getBiophysicalProperties()
+				.getMembraneProperties().getInitMembPotential()
+				.getParameterValue("value"));
 	}
 
-	//
-	// @Test
-	// public void testEvaluation() throws LEMSCompilerException {
-	//
-	// Component foo0 = fooModel.getComponentById("foo0");
-	// Component barInFoo0 = fooModel.getComponentById("fooBar");
-	//
-	// Double pBar =
-	// Double.valueOf(fooModel.getFoos().get(0).getFooBar().getPBar());
-	// assertEquals(pBar, foo0
-	// .getChildren()
-	// .get(0)
-	// .getScope()
-	// .evaluate("pBar").getValue().doubleValue(), 1e-12);
-	// assertEquals(0.1, barInFoo0
-	// .getScope()
-	// .evaluate("dpBar").getValue().doubleValue(), 1e-12);
-	//
-	// //testing synch
-	// //changing par via lems api
-	// foo0.withParameterValue("pFoo", "3");
-	// assertEquals(0.3, barInFoo0
-	// .getScope()
-	// .evaluate("dpBar").getValue().doubleValue(), 1e-12);
-	//
-	// //changing par via domain api
-	// ((Foo) foo0).setPFoo("4");
-	//
-	// assertEquals("4", ((Foo) foo0).getPFoo());
-	// assertEquals(0.4, barInFoo0
-	// .getScope()
-	// .evaluate("dpBar").getValue().doubleValue(), 1e-12);
-	// }
-	//
+	@Test
+	public void testEvaluation() throws LEMSCompilerException {
+
+		Cell cell = (Cell) hh.getComponentById("hhcell");
+		ChannelDensity naChans = (ChannelDensity) hh.getComponentById("naChans");
+
+		//different ways to use the API
+		Double g_Na = toDouble(naChans.getParameterValue("condDensity"));
+		assertEquals(g_Na, toDouble(naChans.getCondDensity()));
+		assertEquals(g_Na, cell.getBiophysicalProperties().getMembraneProperties()
+								.getChannelDensities().get(1).getScope()
+								.evaluate("condDensity").getValue().doubleValue(), 1e-12);
+
+		// Testing lems/nml consistence
+		// changing par via lems api.
+		//TODO: discuss whether we should have a ref or a copy of the Channel
+		//      inside the density, i.e. should the change below propagate to
+		//      all instances of naChan?
+		BaseIonChannel naChan = naChans.getIonChannel();
+		System.out.println(naChan.getParameterValue("conductance"));
+		naChan.withParameterValue("conductance", "42 pS");
+		assertEquals(hh.getComponentById("naChan").getParameterValue("conductance"), "42 pS");
+		assertEquals(4.0, naChan.getScope().evaluate("conductance").getValue()
+				.doubleValue(), 1e-12);
+
+		// changing par via domain api
+		((IonChannel) naChan).setConductance("10 pS");
+		assertEquals("10 pS", ((IonChannel) naChan).getConductance());
+	}
+
+	private Double toDouble(String valUnit) {
+		return Double.valueOf(valUnit.split(" ")[0]);
+	}
+
 	@Test
 	public void testMarshalling() throws JAXBException, PropertyException,
 			IOException {
