@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.measure.Quantity;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
@@ -14,16 +15,23 @@ import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.lemsml.model.ComponentReference;
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
+import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
 import org.lemsml.model.extended.Lems;
+import org.lemsml.model.extended.Scope;
 import org.lemsml.model.extended.interfaces.HasComponents;
 
+import tec.units.ri.quantity.Quantities;
+
 import com.google.common.base.Charsets;
+import com.google.common.collect.ImmutableMap;
 import com.google.common.io.Files;
 
 public class DoMoGenerationTest {
@@ -31,6 +39,8 @@ public class DoMoGenerationTest {
 	private JAXBContext jaxbContext;
 	private Neuroml2 hh;
 	private Lems domainDefs;
+
+	@Rule public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void setUp() throws Throwable {
@@ -94,15 +104,42 @@ public class DoMoGenerationTest {
 		//      inside the density, i.e. should the change below propagate to
 		//      all instances of naChan?
 		BaseIonChannel naChan = naChans.getIonChannel();
-		System.out.println(naChan.getParameterValue("conductance"));
+		assertEquals("10pS", naChan.getParameterValue("conductance"));
 		naChan.withParameterValue("conductance", "42 pS");
 		assertEquals(hh.getComponentById("naChan").getParameterValue("conductance"), "42 pS");
-		assertEquals(4.0, naChan.getScope().evaluate("conductance").getValue()
+		assertEquals(42.0, naChan.getScope().evaluate("conductance").getValue()
 				.doubleValue(), 1e-12);
 
 		// changing par via domain api
-		((IonChannel) naChan).setConductance("10 pS");
-		assertEquals("10 pS", ((IonChannel) naChan).getConductance());
+		naChan.setConductance("10 pS");
+		assertEquals("10 pS", naChan.getConductance());
+
+		// Expression evaluation
+		List<GateHHrates> naGates = ((IonChannelHH) naChan).getGatesHHrates();
+		GateHHrates m = naGates.get(0);
+		assertEquals(m, naChan.getSubComponentsWithName("m").get(0));
+
+		Scope rev = m.getReverseRate().getScope();
+
+		Double rate = rev.evaluate("rate").getValue().doubleValue();
+		Double scale = rev.evaluate("scale").getValue().doubleValue();
+		Double midpoint = rev.evaluate("midpoint").getValue().doubleValue();
+		Double expected = rate * Math.exp((0. - midpoint)/scale);
+
+		assertEquals(expected,
+				rev.evaluate("r", getContext("v", 0., "mV")).getValue().doubleValue(), 1e-10);
+
+		thrown.expect(LEMSCompilerException.class); // v is undefined!!
+		thrown.expectMessage(LEMSCompilerError.MissingSymbolValue.toString());
+		m.getForwardRate().getScope().evaluate("r");
+
+
+	}
+
+	public ImmutableMap<String, Quantity<?>> getContext(String var, Double i, String unit) {
+		ImmutableMap<String, Quantity<?>> ctxt = new ImmutableMap.Builder<String, Quantity<?>>()
+				.put(var, Quantities.getQuantity(i , hh.getUnitBySymbol(unit))).build();
+		return ctxt;
 	}
 
 	private Double toDouble(String valUnit) {
