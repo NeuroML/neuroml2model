@@ -89,7 +89,11 @@ public class DoMoGenerationTest {
 	public void testEvaluation() throws LEMSCompilerException {
 
 		Cell cell = (Cell) hh.getComponentById("hhcell");
-		ChannelDensity naChans = (ChannelDensity) hh.getComponentById("naChans");
+		ChannelDensity naChans = (ChannelDensity) cell
+				.getBiophysicalProperties()
+				.getMembraneProperties()
+				.getSubComponentsWithName("naChans").get(0);
+
 
 		//different ways to use the API
 		Double g_Na = toDouble(naChans.getParameterValue("condDensity"));
@@ -129,7 +133,7 @@ public class DoMoGenerationTest {
 		assertEquals(expected,
 				rev.evaluate("r", getContext("v", 0., "mV")).getValue().doubleValue(), 1e-10);
 
-		thrown.expect(LEMSCompilerException.class); // v is undefined!!
+		thrown.expect(LEMSCompilerException.class); // check if it fails for missing val...
 		thrown.expectMessage(LEMSCompilerError.MissingSymbolValue.toString());
 		m.getForwardRate().getScope().evaluate("r");
 
@@ -149,7 +153,7 @@ public class DoMoGenerationTest {
 	@Test
 	public void testMarshalling() throws JAXBException, PropertyException,
 			IOException {
-
+		//TODO: autogen marshaller??
 		File tmpFile = File.createTempFile("test", ".xml");
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
