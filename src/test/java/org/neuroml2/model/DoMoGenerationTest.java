@@ -68,6 +68,12 @@ public class DoMoGenerationTest {
 	}
 
 	@Test
+	public void testAPI() throws Throwable {
+		Neuroml2 hh2 = NeuroML2ModelReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
+		assertEquals(hh.getCells().size(), hh2.getCells().size());
+	}
+
+	@Test
 	public void testTypes() throws LEMSCompilerException {
 		assertEquals(1, hh.getCells().size());
 		assertEquals(0, hh.getIonChannels().size());
