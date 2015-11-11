@@ -11,8 +11,9 @@ import org.lemsml.model.extended.Lems;
 
 public class NeuroML2ModelReader {
 	public static Neuroml2 read(File modelFile) throws Throwable {
-		File coreTypes = new File(NeuroML2ModelReader.class.getResource(
-				"/lems/NeuroML2CoreTypes.xml").getFile());
+
+		File coreTypes = new File(NeuroML2ModelReader.class.getClassLoader()
+				.getResource("lems/NeuroML2CoreTypes.xml").getFile());
 		Lems domainDefs = new LEMSCompilerFrontend(coreTypes)
 				.generateLEMSDocument();
 
@@ -29,4 +30,5 @@ public class NeuroML2ModelReader {
 
 		return model;
 	}
+
 }

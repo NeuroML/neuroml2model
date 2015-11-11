@@ -25,6 +25,22 @@
 					</execution>
 				</executions>
 			</plugin>
+			<plugin>
+				<artifactId>maven-remote-resources-plugin</artifactId>
+				<version>1.1</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>bundle</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>lems/*.xml</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
 		</plugins>
 
 
