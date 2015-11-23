@@ -7,6 +7,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.lemsml.model.compiler.LEMSCompilerFrontend;
 import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
+import org.lemsml.model.extended.ExtObjectFactory;
 import org.lemsml.model.extended.Lems;
 
 public class NeuroML2ModelReader {
@@ -19,6 +20,8 @@ public class NeuroML2ModelReader {
 
 		JAXBContext jaxbContext = JAXBContext.newInstance("org.neuroml2.model");
 		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
+		//use the factory for extended LEMS types
+		jaxbUnmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", new ExtObjectFactory());
 		Neuroml2 model = (Neuroml2) jaxbUnmarshaller.unmarshal(modelFile);
 
 		// TODO: ideal way of doing that?
