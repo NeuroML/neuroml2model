@@ -36,6 +36,7 @@
 						<configuration>
 							<includes>
 								<include>lems/*.xml</include>
+								<include>lems/*.xslt</include>
 							</includes>
 						</configuration>
 					</execution>
