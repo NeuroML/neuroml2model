@@ -6,6 +6,9 @@
 	<name>NeuroML2 model</name>
 	<url>https://neuroml.org/</url>
 
+	<artifactId>neuroml2-model</artifactId>
+	<groupId>org.neuroml2.model</groupId>
+
 	<build>
 		<plugins>
 			<plugin>
@@ -81,7 +84,13 @@
 		</pluginManagement>
 	</build>
 
-
+	<repositories>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+       
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>
@@ -93,12 +102,10 @@
 			<artifactId>jaxb-api</artifactId>
 			<version>2.2.12-b140109.1041</version>
 		</dependency>
-		<dependency>
-			<groupId>org.lemsml.model</groupId>
-			<artifactId>org.lemsml.model</artifactId>
-			<version>0.0.1</version>
+		<dependency>	
+		    <groupId>com.github.borismarin</groupId>
+		    <artifactId>org.lemsml.model</artifactId>
+		    <version>-SNAPSHOT</version>
 		</dependency>
-	</dependencies>
-	<artifactId>neuroml2-model</artifactId>
-	<groupId>org.neuroml2.model</groupId>
+		</dependencies>
 </project>
