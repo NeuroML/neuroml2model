@@ -9,12 +9,6 @@
 	<artifactId>neuroml2-model</artifactId>
 	<version>0.0.1</version>
 
-	<repositories>
-		<repository>
-		    <id>jitpack.io</id>
-		    <url>https://jitpack.io</url>
-		</repository>
-	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -28,18 +22,40 @@
 			<version>2.2.12-b140109.1041</version>
 		</dependency>
 		<dependency>
-	    		<groupId>com.github.borismarin</groupId>
-	    		<artifactId>lems-domogen-maven-plugin</artifactId>
-	    		<version>-SNAPSHOT</version>
+		    <groupId>com.github.borismarin</groupId>
+		    <artifactId>org.lemsml.model</artifactId>
+		    <version>-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+			<snapshots>
+		            <enabled>true</enabled>
+			</snapshots>
+		</pluginRepository>
+	</pluginRepositories>
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<build>
 		<plugins>
 			<plugin>
+				<dependencies>
+					<dependency>
+					    <groupId>com.github.borismarin</groupId>
+					    <artifactId>lems-domogen-maven-plugin</artifactId>
+					    <version>0.1</version>
+					</dependency>
+				</dependencies>
                     		<groupId>com.github.borismarin</groupId>
 	    			<artifactId>lems-domogen-maven-plugin</artifactId>
-	    			<version>0.0.1</version>
+			        <version>0.1</version>
 				<configuration>
 					<mlName>neuroml2</mlName>
 					<componentTypeDefs>${project.basedir}/src/main/resources/lems/NeuroML2CoreTypes.xml</componentTypeDefs>
