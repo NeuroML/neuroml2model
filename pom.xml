@@ -5,8 +5,8 @@
 	<name>NeuroML2 model</name>
 	<url>https://neuroml.org/</url>
 
-	<artifactId>neuroml2-model</artifactId>
 	<groupId>org.neuroml2.model</groupId>
+	<artifactId>neuroml2-model</artifactId>
 	<version>0.1-SNAPSHOT</version>
 
 	<repositories>
