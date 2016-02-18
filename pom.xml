@@ -38,7 +38,7 @@
 	<build>
 		<plugins>
 			<plugin>
-	    			<groupId>org.lemsml</groupId>
+                    		<groupId>com.github.borismarin</groupId>
 	    			<artifactId>lems-domogen-maven-plugin</artifactId>
 	    			<version>0.0.1-SNAPSHOT</version>
 				<configuration>
