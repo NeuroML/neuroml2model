@@ -28,17 +28,17 @@
 			<version>2.2.12-b140109.1041</version>
 		</dependency>
 		<dependency>
-                    <groupId>com.github.borismarin</groupId>
-                    <artifactId>lems-domogen-maven-plugin</artifactId>
-                    <version>-SNAPSHOT</version>
-                </dependency>
+	    		<groupId>com.github.borismarin</groupId>
+	    		<artifactId>lems-domogen-maven-plugin</artifactId>
+	    		<version>-SNAPSHOT</version>
+		</dependency>
 
 		</dependencies>
 
 	<build>
 		<plugins>
 			<plugin>
-                    		<groupId>com.github.borismarin</groupId>
+                    		<groupId>org.lemsml</groupId>
 	    			<artifactId>lems-domogen-maven-plugin</artifactId>
 	    			<version>0.0.1-SNAPSHOT</version>
 				<configuration>
