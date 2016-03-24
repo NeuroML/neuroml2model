@@ -564,7 +564,7 @@
         <Children name="members" type="member"/>
         <Children name="paths" type="path"/>
         <Children name="subTrees" type="subTree"/>
-        <Children name="includes" type="include"/> <!-- TODO deal with <include> used also for including ext NML files... -->
+        <Children name="includes" type="includeSegmentGroup"/> <!-- TODO deal with <include> used also for including ext NML files... -->
         <Children name="inhomogeneousParameter" type="inhomogeneousParameter"/>
 
         <Text name="neuroLexId"/>
@@ -587,7 +587,7 @@
     </ComponentType>
 
 
-    <ComponentType name="include" description="Include all members of another _segmentGroup_ in this">
+    <ComponentType name="includeSegmentGroup" description="Include all members of another _segmentGroup_ in this">
         <Text name="href"/> <!--TODO: sort this!!! Needed since <include> is used to include external nml files!! -->
         <Text name="segmentGroup"/>
     </ComponentType>
