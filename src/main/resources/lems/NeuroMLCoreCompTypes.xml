@@ -13,23 +13,20 @@
 
 
     <ComponentType name="annotation" description="Annotation...">
-        <Child name="property" type="property"/>
-        <Child name="rdf:RDF" type="rdf_RDF"/>
-        <Dynamics/>
+        <Children name="property" type="property"/>
+        <Children name="rdf:RDF" type="rdf_RDF"/>
     </ComponentType>
 
 
     <ComponentType name="property" description="Property in Annotation...">
         <Text name="tag"/>
         <Text name="value"/>
-        <Dynamics/>
     </ComponentType>
 
 
     <ComponentType name="rdf_RDF" description="Work in progress...">
         <Child name="rdf:Description" type="rdf_Description"/>
         <Text name="xmlns:rdf"/>
-        <Dynamics/>
     </ComponentType>
 
 
@@ -52,13 +49,11 @@
         <Child name="bqmodel:isDescribedBy" type="bqmodel_isDescribedBy"/>
         <Child name="bqmodel:isDerivedFrom" type="bqmodel_isDerivedFrom"/>
         <Text name="rdf:about"/>
-        <Dynamics/>
     </ComponentType>
 
 
     <ComponentType name="baseBqbiol" description="Work in progress...">
         <Child name="rdf:Bag" type="rdf_Bag"/>
-        <Dynamics/>
     </ComponentType>
 
 
