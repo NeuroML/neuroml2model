@@ -64,7 +64,7 @@ public class DoMoGenerationTest {
 	@Test
 	public void testGeneration() {
 
-		assertEquals(202, domainDefs.getComponentTypes().size());
+		assertEquals(205, domainDefs.getComponentTypes().size());
 	}
 
 	@Test
@@ -125,8 +125,8 @@ public class DoMoGenerationTest {
 		assertEquals("10 pS", naChan.getConductance());
 
 		// Expression evaluation
-		List<GateHHrates> naGates = ((IonChannelHH) naChan).getGatesHHrates();
-		GateHHrates m = naGates.get(0);
+		List<Gate> naGates = ((IonChannelHH) naChan).getGates();
+		GateHHrates m = (GateHHrates) naGates.get(0);
 		assertEquals(m, naChan.getSubComponentsWithName("m").get(0));
 
 		Scope rev = m.getReverseRate().getScope();
