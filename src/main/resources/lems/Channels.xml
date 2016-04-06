@@ -216,9 +216,13 @@
 
     </ComponentType>
 
+    <ComponentType name="gate"
+                   extends="baseGate"
+                   description="Conveniently named baseGate">
+    </ComponentType>
 
     <ComponentType name="gateHHrates"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
         <Children name="notes" type="notes"/>
@@ -262,7 +266,7 @@
 
 
     <ComponentType name="gateHHtauInf"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
         <Children name="notes" type="notes"/>
@@ -298,7 +302,7 @@
     </ComponentType>
 
     <ComponentType name="gateHHInstantaneous"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism but is instantaneous, so tau = 0 and gate follows exactly inf value">
 
         <Constant name="SEC" dimension="time" value="1 s"/>
@@ -325,7 +329,7 @@
 
 
     <ComponentType name="gateHHratesTau"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
         <Children name="notes" type="notes"/>
@@ -369,7 +373,7 @@
 
 
     <ComponentType name="gateHHratesInf"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
         <Children name="notes" type="notes"/>
@@ -409,7 +413,7 @@
 
 
     <ComponentType name="gateHHratesTauInf"
-                   extends="baseGate"
+                   extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
         <Children name="notes" type="notes"/>
@@ -449,6 +453,49 @@
     </ComponentType>
 
 
+    <ComponentType name="gateFractional"
+                   extends="gate"
+                   description="Gate composed of subgates contributing with fractional conductance">
+
+        <Children name="q10Settings" type="baseQ10Settings"/>
+        <Children name="subGate" type="subGate"/>
+        <Exposure name="rateScale" dimension="none"/>
+
+        <Dynamics>
+            <DerivedVariable name="q" exposure="q" dimension="none" select="subGate[*]/qfrac" reduce="add"/>
+            <DerivedVariable name="fcond" exposure="fcond" dimension="none" value="q^instances"/>
+            <DerivedVariable name="rateScale" exposure="rateScale" dimension="none" select="q10Settings[*]/q10" reduce="multiply"/>
+        </Dynamics>
+    </ComponentType>
+
+
+    <ComponentType name="subGate"
+                   description="Gate composed of subgates contributing with fractional conductance">
+
+        <Child name="notes" type="notes"/>
+
+        <Child name="timeCourse" type="baseVoltageDepTime" />
+        <Child name="steadyState" type="baseVoltageDepVariable" />
+        <Parameter name="fractionalConductance" dimension="none"/>
+
+        <Exposure name="tau" dimension="time"/>
+        <Exposure name="inf" dimension="none"/>
+        <Exposure name="qfrac" dimension="none"/>
+        <Exposure name="q" dimension="none"/>
+        <Requirement name="rateScale" dimension="none"/>
+
+        <Dynamics>
+            <StateVariable name="q" exposure="q" dimension="none"/>
+            <DerivedVariable name="inf" dimension="none" exposure="inf" select="steadyState/x"/>
+            <DerivedVariable name="tauUnscaled" dimension="time" select="timeCourse/t"/>
+            <DerivedVariable name="tau" dimension="time" exposure="tau" value="tauUnscaled / rateScale"/>
+            <DerivedVariable name="qfrac" dimension="none" exposure="qfrac" value="q * fractionalConductance"/>
+            <TimeDerivative variable="q" value="(inf - q) / tau"/>
+            <OnStart>
+                <StateAssignment variable="q" value="inf"/>
+            </OnStart>
+        </Dynamics>
+    </ComponentType>
     <ComponentType name="baseIonChannel"
                    description="Base for all ion channel ComponentTypes">
         <Parameter name="conductance" dimension="conductance"/>
@@ -480,25 +527,15 @@
         <Children name="annotation" type="annotation"/>
 
         <Children name="conductanceScaling" type="baseConductanceScaling"/>
-        <Children name="gatesHHrates" type="gateHHrates"/>
-        <Children name="gatesHHtauInf" type="gateHHtauInf"/>
-        <Children name="gatesHHratesTau" type="gateHHratesTau"/>
-        <Children name="gatesHHratesInf" type="gateHHratesInf"/>
-        <Children name="gatesHHratesTauInf" type="gateHHratesTauInf"/>
-        <Children name="gateHHInstantaneous" type="gateHHInstantaneous"/>
+        <Children name="gates" type="gate"/>
 
         <Text name="neuroLexId"/>
         <Text name="species"/>
 
         <Dynamics>
             <DerivedVariable name="conductanceScale" dimension="none" select="conductanceScaling[*]/factor" reduce="multiply"/>
-            <DerivedVariable name="fopenHHrates" dimension="none" select="gatesHHrates[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHtauInf" dimension="none" select="gatesHHtauInf[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHratesTau" dimension="none" select="gatesHHratesTau[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHratesInf" dimension="none" select="gatesHHratesInf[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHratesTauInf" dimension="none" select="gatesHHratesTauInf[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHInstantaneous" dimension="none" select="gateHHInstantaneous[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopen" exposure="fopen" dimension="none" value="conductanceScale * fopenHHrates * fopenHHtauInf * fopenHHratesTau * fopenHHratesInf * fopenHHratesTauInf * fopenHHInstantaneous"/>
+            <DerivedVariable name="fopen0" dimension="none" select="gates[*]/fcond" reduce="multiply"/>
+            <DerivedVariable name="fopen" exposure="fopen" dimension="none" value="conductanceScale * fopen0"/>
             <DerivedVariable name="g" exposure="g" value="conductance * fopen" dimension="conductance"/>
         </Dynamics>
     </ComponentType>
@@ -510,11 +547,8 @@
 
         <Dynamics>
             <DerivedVariable name="conductanceScale" dimension="none" select="conductanceScaling[*]/factor" reduce="multiply"/>
-            <DerivedVariable name="fopenHHrates" dimension="none" select="gatesHHrates[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHtauInf" dimension="none" select="gatesHHtauInf[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHratesTau" dimension="none" select="gatesHHratesTau[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopenHHratesInf" dimension="none" select="gatesHHratesInf[*]/fcond" reduce="multiply"/>
-            <DerivedVariable name="fopen" exposure="fopen" dimension="none" value="conductanceScale * fopenHHrates * fopenHHtauInf * fopenHHratesTau * fopenHHratesInf"/>
+            <DerivedVariable name="fopen0" dimension="none" select="gates[*]/fcond" reduce="multiply"/>
+            <DerivedVariable name="fopen" exposure="fopen" dimension="none" value="conductanceScale * fopen0"/>
             <DerivedVariable name="g" exposure="g" value="conductance * fopen" dimension="conductance"/>
         </Dynamics>
 
@@ -552,12 +586,12 @@
     <ComponentType name="ionChannelKS"
                    extends="ionChannel"
                    description="A kinetic scheme based ion channel with multiple _gateKS_s, each of which consists of multiple _KSState_s and _KSTransition_s giving the rates of transition between them">
-        <Children name="gates" type="gateKS"/>
+        <Children name="gatesKS" type="gateKS"/>
 
         <Text name="species"/>
 
         <Dynamics>
-            <DerivedVariable name="fopen" exposure="fopen" dimension="none" select="gates[*]/fcond" reduce="multiply"/>
+            <DerivedVariable name="fopen" exposure="fopen" dimension="none" select="gatesKS[*]/fcond" reduce="multiply"/>
             <DerivedVariable name="g" exposure="g" dimension="conductance" value="fopen * conductance"/>
 
         </Dynamics>
@@ -658,10 +692,10 @@
 
         <Dynamics>
 
+            <DerivedVariable name="rateScale" exposure="rateScale" dimension="none" select="q10Settings[*]/q10" reduce="multiply"/>
             <DerivedVariable name="q" exposure="q" dimension="none" select="states[*]/q" reduce="add"/>
             <DerivedVariable name="fcond" exposure="fcond" dimension="none" value="q^instances"/>
 
-            <DerivedVariable name="rateScale" exposure="rateScale" dimension="none" select="q10Settings[*]/q10" reduce="multiply"/>
 
             <KineticScheme name="ks" nodes="states" stateVariable="occupancy"
                            edges="transitions" edgeSource="from" edgeTarget="to"
