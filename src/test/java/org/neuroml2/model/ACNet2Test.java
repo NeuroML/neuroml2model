@@ -12,15 +12,12 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
-import javax.xml.bind.Unmarshaller;
 
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.lemsml.model.ComponentReference;
-import org.lemsml.model.compiler.LEMSCompilerFrontend;
-import org.lemsml.model.compiler.semantic.LEMSSemanticAnalyser;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
@@ -36,40 +33,21 @@ import com.google.common.io.Files;
 
 public class ACNet2Test {
 
-	private JAXBContext jaxbContext;
 	private Neuroml2 acnet;
-	private Lems domainDefs;
 
-	@Rule public ExpectedException thrown = ExpectedException.none();
+	@Rule
+	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void setUp() throws Throwable {
-		domainDefs = new LEMSCompilerFrontend(
-				getLocalFile("/lems/NeuroML2CoreTypes.xml"))
-				.generateLEMSDocument();
-
-		File model = getLocalFile("/acnet2flat.nml");
-
-		jaxbContext = JAXBContext.newInstance("org.neuroml2.model");
-		Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-		acnet = (Neuroml2) jaxbUnmarshaller.unmarshal(model);
-		// TODO: ideal way of doing that?
-		acnet.getComponentTypes().addAll(domainDefs.getComponentTypes());
-		acnet.getUnits().addAll(domainDefs.getUnits());
-		acnet.getConstants().addAll(domainDefs.getConstants());
-		acnet.getDimensions().addAll(domainDefs.getDimensions());
-		new LEMSSemanticAnalyser(acnet).analyse();
+		acnet = NeuroML2ModelReader.read(getLocalFile("/acnet2flat.nml"));
 	}
 
-	@Test
-	public void testGeneration() {
-
-		assertEquals(202, domainDefs.getComponentTypes().size());
-	}
 
 	@Test
 	public void testAPI() throws Throwable {
-		Neuroml2 hh2 = NeuroML2ModelReader.read(getLocalFile("/acnet2flat.nml"));
+		Neuroml2 hh2 = NeuroML2ModelReader
+				.read(getLocalFile("/acnet2flat.nml"));
 		assertEquals(acnet.getCells().size(), hh2.getCells().size());
 	}
 
@@ -94,27 +72,28 @@ public class ACNet2Test {
 
 		Cell cell = (Cell) acnet.getComponentById("pyr_4_sym");
 		ChannelDensity naChans = (ChannelDensity) cell
-				.getBiophysicalProperties()
-				.getMembraneProperties()
+				.getBiophysicalProperties().getMembraneProperties()
 				.getSubComponentsWithName("Na_pyr_soma_group").get(0);
 
-
-		//different ways to use the API
+		// different ways to use the API
 		Double g_Na = toDouble(naChans.getParameterValue("condDensity"));
 		assertEquals(g_Na, toDouble(naChans.getCondDensity()));
-		assertEquals(g_Na, cell.getBiophysicalProperties().getMembraneProperties()
-								.getChannelDensities().get(4).getScope()
-								.evaluate("condDensity").getValue().doubleValue(), 1e-12);
+		assertEquals(g_Na, cell.getBiophysicalProperties()
+				.getMembraneProperties().getChannelDensities().get(4)
+				.getScope().evaluate("condDensity").getValue().doubleValue(),
+				1e-12);
 
 		// Testing lems/nml consistence
 		// changing par via lems api.
-		//TODO: discuss whether we should have a ref or a copy of the Channel
-		//      inside the density, i.e. should the change below propagate to
-		//      all instances of naChan?
+		// TODO: discuss whether we should have a ref or a copy of the Channel
+		// inside the density, i.e. should the change below propagate to
+		// all instances of naChan?
 		BaseIonChannel naChan = naChans.getIonChannel();
 		assertEquals("10pS", naChan.getParameterValue("conductance"));
 		naChan.withParameterValue("conductance", "42 pS");
-		assertEquals(acnet.getComponentById("Na_pyr").getParameterValue("conductance"), "42 pS");
+		assertEquals(
+				acnet.getComponentById("Na_pyr").getParameterValue(
+						"conductance"), "42 pS");
 		assertEquals(42.0, naChan.getScope().evaluate("conductance").getValue()
 				.doubleValue(), 1e-12);
 
@@ -123,8 +102,8 @@ public class ACNet2Test {
 		assertEquals("10 pS", naChan.getConductance());
 
 		// Expression evaluation
-		List<GateHHrates> naGates = ((IonChannel) naChan).getGatesHHrates();
-		GateHHrates m = naGates.get(0);
+		List<Gate> naGates = ((IonChannel) naChan).getGates();
+		GateHHrates m = (GateHHrates) naGates.get(0);
 		assertEquals(m, naChan.getSubComponentsWithName("m").get(0));
 
 		Scope rev = m.getReverseRate().getScope();
@@ -132,22 +111,26 @@ public class ACNet2Test {
 		Double rate = rev.evaluate("rate").getValue().doubleValue();
 		Double scale = rev.evaluate("scale").getValue().doubleValue();
 		Double midpoint = rev.evaluate("midpoint").getValue().doubleValue();
-		//rate * x / (1 - exp(0 - x))
-		Double expected = 1000*(rate * (0. - midpoint)/scale / (1. - Math.exp(-(0. - midpoint)/scale))); //explinear
+		// rate * x / (1 - exp(0 - x))
+		Double expected = 1000 * (rate * (0. - midpoint) / scale / (1. - Math
+				.exp(-(0. - midpoint) / scale))); // explinear
 
-		assertEquals(expected,
-				rev.evaluate("r", getContext("v", 0., "mV")).getValue().doubleValue(), 1e-10);
+		assertEquals(expected, rev.evaluate("r", getContext("v", 0., "mV"))
+				.getValue().doubleValue(), 1e-10);
 
-		thrown.expect(LEMSCompilerException.class); // check if it fails for missing val...
+		thrown.expect(LEMSCompilerException.class); // check if it fails for
+													// missing val...
 		thrown.expectMessage(LEMSCompilerError.MissingSymbolValue.toString());
 		m.getForwardRate().getScope().evaluate("r");
 
-
 	}
 
-	public ImmutableMap<String, Quantity<?>> getContext(String var, Double i, String unit) {
+	public ImmutableMap<String, Quantity<?>> getContext(String var, Double i,
+			String unit) {
 		ImmutableMap<String, Quantity<?>> ctxt = new ImmutableMap.Builder<String, Quantity<?>>()
-				.put(var, Quantities.getQuantity(i , acnet.getUnitBySymbol(unit))).build();
+				.put(var,
+						Quantities.getQuantity(i, acnet.getUnitBySymbol(unit)))
+				.build();
 		return ctxt;
 	}
 
@@ -158,8 +141,9 @@ public class ACNet2Test {
 	@Test
 	public void testMarshalling() throws JAXBException, PropertyException,
 			IOException {
-		//TODO: autogen marshaller??
+		// TODO: autogen marshaller??
 		File tmpFile = File.createTempFile("test", ".xml");
+		JAXBContext jaxbContext = JAXBContext.newInstance("org.neuroml2.model");
 		Marshaller marshaller = jaxbContext.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
 
