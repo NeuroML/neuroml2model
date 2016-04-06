@@ -24,7 +24,9 @@ public class NeuroML2ModelReader {
 
 		//Adds the correct namespace to ComponentType defs inside nml
 		File nsXSLT = getLocalFile("lems/addLemsNS.xslt");
+		File kludge71XSLT = getLocalFile("lems/jLEMS_issue71_workaround.xslt");
 		File transformed = XMLUtils.transform(modelFile, nsXSLT);
+		transformed = XMLUtils.transform(transformed, kludge71XSLT);
 
 		jaxbUnmarshaller.setProperty("com.sun.xml.bind.ObjectFactory", new ExtObjectFactory());
 		Neuroml2 model = (Neuroml2) jaxbUnmarshaller.unmarshal(transformed);
