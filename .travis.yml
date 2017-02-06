@@ -17,11 +17,13 @@ install:
   - mvn install
   - cd ..
   
+  # TODO: Update to github.com/borismarin, or github.com/LEMS version of repo
   - git clone https://github.com/pgleeson/org.lemsml.model.git
   - cd org.lemsml.model
   - mvn install
   - cd ..
   
+  # TODO: Update to github.com/borismarin, or github.com/LEMS version of repo
   - git clone https://github.com/pgleeson/lems-domogen-maven-plugin.git
   - cd lems-domogen-maven-plugin
   - mvn install
