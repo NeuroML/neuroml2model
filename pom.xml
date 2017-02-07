@@ -7,7 +7,7 @@
 
 	<groupId>org.neuroml.neuroml2-model</groupId>
 	<artifactId>org.neuroml.neuroml2-model</artifactId>
-	<version>0.0.2</version>
+	<version>0.0.3</version>
 
 
 	<dependencies>
@@ -24,7 +24,7 @@
 		<dependency>
 		    <groupId>org.lemsml.model</groupId>
 		    <artifactId>org.lemsml.model</artifactId>
-		    <version>0.0.2</version>
+		    <version>0.0.3</version>
 		</dependency>
 	</dependencies>
 	<pluginRepositories>
@@ -50,12 +50,12 @@
 					<dependency>
 					    <groupId>org.lemsml.lems-domogen-maven-plugin</groupId>
 					    <artifactId>org.lemsml.lems-domogen-maven-plugin</artifactId>
-					    <version>0.2</version>
+					    <version>0.3</version>
 					</dependency>
 				</dependencies>
                 <groupId>org.lemsml.lems-domogen-maven-plugin</groupId>
                 <artifactId>org.lemsml.lems-domogen-maven-plugin</artifactId>
-                <version>0.2</version>
+                <version>0.3</version>
 				<configuration>
 					<mlName>neuroml2</mlName>
 					<componentTypeDefs>${project.basedir}/src/main/resources/lems/NeuroML2CoreTypes.xml</componentTypeDefs>
@@ -107,7 +107,7 @@
 											org.lemsml.lems-domogen-maven-plugin
 										</artifactId>
 										<versionRange>
-											[0.0.1-SNAPSHOT,)
+											[0.3,)
 										</versionRange>
 										<goals>
 											<goal>generateDoMoClasses</goal>
