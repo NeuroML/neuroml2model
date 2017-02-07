@@ -12,7 +12,8 @@ jdk:
   - oraclejdk8
 
 install:
-  - git clone https://github.com/borismarin/expr-parser.git
+  # TODO: Update to github.com/borismarin, or github.com/LEMS version of repo
+  - git clone https://github.com/pgleeson/expr-parser.git
   - cd expr-parser
   - mvn install
   - cd ..

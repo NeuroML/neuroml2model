@@ -5,9 +5,9 @@
 	<name>NeuroML2 model</name>
 	<url>https://neuroml.org/</url>
 
-	<groupId>com.github.borismarin</groupId>
-	<artifactId>neuroml2-model</artifactId>
-	<version>0.0.1</version>
+	<groupId>org.neuroml.neuroml2-model</groupId>
+	<artifactId>org.neuroml.neuroml2-model</artifactId>
+	<version>0.0.2</version>
 
 
 	<dependencies>
@@ -22,9 +22,9 @@
 			<version>2.2.12-b140109.1041</version>
 		</dependency>
 		<dependency>
-		    <groupId>com.github.borismarin</groupId>
+		    <groupId>org.lemsml.model</groupId>
 		    <artifactId>org.lemsml.model</artifactId>
-		    <version>0.0.1</version>
+		    <version>0.0.2</version>
 		</dependency>
 	</dependencies>
 	<pluginRepositories>
@@ -48,14 +48,14 @@
 			<plugin>
 				<dependencies>
 					<dependency>
-					    <groupId>com.github.borismarin</groupId>
-					    <artifactId>lems-domogen-maven-plugin</artifactId>
-					    <version>0.1</version>
+					    <groupId>org.lemsml.lems-domogen-maven-plugin</groupId>
+					    <artifactId>org.lemsml.lems-domogen-maven-plugin</artifactId>
+					    <version>0.2</version>
 					</dependency>
 				</dependencies>
-                    		<groupId>com.github.borismarin</groupId>
-	    			<artifactId>lems-domogen-maven-plugin</artifactId>
-			        <version>0.1</version>
+                <groupId>org.lemsml.lems-domogen-maven-plugin</groupId>
+                <artifactId>org.lemsml.lems-domogen-maven-plugin</artifactId>
+                <version>0.2</version>
 				<configuration>
 					<mlName>neuroml2</mlName>
 					<componentTypeDefs>${project.basedir}/src/main/resources/lems/NeuroML2CoreTypes.xml</componentTypeDefs>
@@ -104,7 +104,7 @@
 									<pluginExecutionFilter>
 										<groupId>org.lemsml</groupId>
 										<artifactId>
-											lems-domogen-maven-plugin
+											org.lemsml.lems-domogen-maven-plugin
 										</artifactId>
 										<versionRange>
 											[0.0.1-SNAPSHOT,)
