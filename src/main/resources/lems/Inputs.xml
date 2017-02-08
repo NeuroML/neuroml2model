@@ -8,10 +8,8 @@
 
     
     <ComponentType name="basePointCurrent"
-                   description="Base type for all ComponentTypes which produce a current _i (with dimension current)">
-        
-        <Child name="notes" type="notes"/>
-        <Child name="annotation" type="annotation"/>
+                   description="Base type for all ComponentTypes which produce a current _i (with dimension current)"
+                   extends="baseStandalone">
         
         <Exposure name="i" dimension="current" description="The total (time varying) current produced by this ComponentType"/>
 
@@ -254,7 +252,8 @@
                 <StateAssignment variable="tsince" value="0"/>
                 <StateAssignment variable="nextIsi" value="- averageIsi * log(1 - random(1))"/>
                 <!--
-                Check to see whether current time + next ISI is greater than delay+duration and if so set is to a long time in future...
+                Check to see whether current time + next ISI is greater than delay+duration and if so set it to a long time in the future...
+                The use of H() is necessary here (as opposed to checking this in the test of OnCondition) since NEURON requires a single boolean expression in test above
                 -->
                 <StateAssignment variable="isi" value="nextIsi + H(((t+nextIsi) - (delay+duration))/duration)*LONG_TIME"/>
                 <EventOut port="spike"/>
@@ -274,11 +273,13 @@
 
 
     <ComponentType name="timedSynapticInput"
-                   description="Spike array connected to single synapse, producing current for each spike in the array "
+                   description="Spike array connected to a single synapse, producing current triggered by each spike in the array"
                    extends="baseVoltageDepPointCurrentSpiking">
         
-        <ComponentReference name="synapse" type="baseSynapse"/>
         <Children name="spikes" type="spike"/>
+        
+        <ComponentReference name="synapse" type="baseSynapse"/>
+        
         <EventPort name="in" direction="in" description="This will receive events from the children"/>
 
         <Exposure name="tsince" dimension="time" description="Time since the last spike was emitted"/>
@@ -297,6 +298,7 @@
             </OnEvent>
 
         </Dynamics>
+        
         <Structure>
             <ChildInstance component="synapse"/>
             

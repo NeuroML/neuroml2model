@@ -21,7 +21,6 @@ import org.lemsml.model.ComponentReference;
 import org.lemsml.model.exceptions.LEMSCompilerError;
 import org.lemsml.model.exceptions.LEMSCompilerException;
 import org.lemsml.model.extended.Component;
-import org.lemsml.model.extended.Lems;
 import org.lemsml.model.extended.Scope;
 import org.lemsml.model.extended.interfaces.HasComponents;
 
@@ -40,14 +39,15 @@ public class ACNet2Test {
 
 	@Before
 	public void setUp() throws Throwable {
-		acnet = NeuroML2ModelReader.read(getLocalFile("/acnet2flat.nml"));
+		NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
+		acnet = nmlReader.read(getLocalFile("/acnet2flat.nml"));
 	}
 
 
 	@Test
 	public void testAPI() throws Throwable {
-		Neuroml2 hh2 = NeuroML2ModelReader
-				.read(getLocalFile("/acnet2flat.nml"));
+		NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
+		Neuroml2 hh2 = nmlReader.read(getLocalFile("/acnet2flat.nml"));
 		assertEquals(acnet.getCells().size(), hh2.getCells().size());
 	}
 

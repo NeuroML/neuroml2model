@@ -64,12 +64,14 @@ public class DoMoGenerationTest {
 	@Test
 	public void testGeneration() {
 
-		assertEquals(205, domainDefs.getComponentTypes().size());
+		assertEquals(207, domainDefs.getComponentTypes().size());
 	}
 
 	@Test
 	public void testAPI() throws Throwable {
-		Neuroml2 hh2 = NeuroML2ModelReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
+        NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
+
+		Neuroml2 hh2 = nmlReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
 		assertEquals(hh.getCells().size(), hh2.getCells().size());
 	}
 

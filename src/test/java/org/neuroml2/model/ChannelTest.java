@@ -4,7 +4,6 @@ import com.google.common.collect.ImmutableMap;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.util.List;
 import java.util.Set;
 import javax.measure.Quantity;
 
@@ -20,25 +19,27 @@ public class ChannelTest {
 	private Neuroml2 hh;
 	private Neuroml2 calva;
 	private Neuroml2 ih;
+	private Neuroml2 kdr;
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
 
 	@Before
 	public void setUp() throws Throwable {
-		hh = NeuroML2ModelReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
-		ih = NeuroML2ModelReader.read(getLocalFile("/Ih.channel.nml"));
-		calva = NeuroML2ModelReader.read(getLocalFile("/Ca_LVAst.channel.nml"));
+        NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
+        
+		hh = nmlReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
+		ih = nmlReader.read_(getLocalFile("/Ih.channel.nml"));
+		calva = nmlReader.read_(getLocalFile("/Ca_LVAst.channel.nml"));
+		kdr = nmlReader.read_(getLocalFile("/kdr.channel.nml"));
 	
 	}
-
-    
 
 	@Test
 	public void testChannels() throws Throwable {
 		assertEquals(hh.getCells().size(),1);
         
-        Neuroml2[] nmlDocs = new Neuroml2[]{hh,ih,calva};
+        Neuroml2[] nmlDocs = new Neuroml2[]{hh,ih,calva,kdr};
         
         for (Neuroml2 nmlDoc: nmlDocs)
         {
@@ -76,13 +77,11 @@ public class ChannelTest {
                                 System.out.println("    T: "+tau.getExpressions());
                                 System.out.println("    T: "+tau.evaluate("t", getContext("v", 0., "mV")));
                             }
-
                         }
                     }
                 }
             }
         }
-        
 	}
 
 	public ImmutableMap<String, Quantity<?>> getContext(String var, Double i, String unit) {
