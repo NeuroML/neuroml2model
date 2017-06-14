@@ -32,7 +32,7 @@
     </ComponentType>
 
 
-    <ComponentType name="HHExpRate"
+    <ComponentType name="HHExpRate" 
                    extends="baseHHRate"
                    description="Exponential form for rate equation (Q: Should these be renamed hhExpRate, etc?)">
         <Dynamics>
@@ -87,7 +87,7 @@
     </ComponentType>
 
 
-    <ComponentType name="HHExpVariable"
+    <ComponentType name="HHExpVariable" 
                    extends="baseHHVariable"
                    description="Exponential form for variable equation">
         <Dynamics>
@@ -96,7 +96,7 @@
     </ComponentType>
 
 
-    <ComponentType name="HHSigmoidVariable"
+    <ComponentType name="HHSigmoidVariable" 
                    extends="baseHHVariable"
                    description="Sigmoidal form for variable equation">
         <Dynamics>
@@ -105,7 +105,7 @@
     </ComponentType>
 
 
-    <ComponentType name="HHExpLinearVariable"
+    <ComponentType name="HHExpLinearVariable" 
                    extends="baseHHVariable"
                    description="Exponential linear form for variable equation. Linear for large positive _v, exponentially decays for large negative _v.">
         <Dynamics>
@@ -149,7 +149,7 @@
     </ComponentType>
 
 
-    <ComponentType name="q10Fixed"
+    <ComponentType name="q10Fixed" 
                    extends="baseQ10Settings"
                    description="A fixed value, _fixedQ10, for the scaling of the time course of the gating variable">
         <Parameter name="fixedQ10" dimension="none"/>
@@ -159,7 +159,7 @@
     </ComponentType>
 
 
-    <ComponentType name="q10ExpTemp"
+    <ComponentType name="q10ExpTemp" 
                    extends="baseQ10Settings"
                    description="A value for the Q10 scaling which varies as a standard function of the difference between the current temperature, _temperature, and the temperature at which the gating variable equations were determined, _experimentalTemp">
 
@@ -210,7 +210,11 @@
 
     <ComponentType name="baseGate"
                    description="Base ComponentType for a voltage and/or concentration dependent gate">
+
         <Parameter name="instances" dimension="none"/>
+
+        <Child name="notes" type="notes"/>
+
         <Exposure name="fcond" dimension="none"/>
         <Exposure name="q" dimension="none"/>
 
@@ -224,8 +228,6 @@
     <ComponentType name="gateHHrates"
                    extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
-
-        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -269,8 +271,6 @@
                    extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Children name="notes" type="notes"/>
-
         <Child name="timeCourse" type="baseVoltageDepTime" />
         <Child name="steadyState" type="baseVoltageDepVariable" />
         <Children name="q10Settings" type="baseQ10Settings"/>
@@ -307,8 +307,6 @@
 
         <Constant name="SEC" dimension="time" value="1 s"/>
 
-        <Children name="notes" type="notes"/>
-
         <Child name="steadyState" type="baseVoltageDepVariable" />
 
         <Exposure name="tau" dimension="time"/>
@@ -331,8 +329,6 @@
     <ComponentType name="gateHHratesTau"
                    extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
-
-        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -376,8 +372,6 @@
                    extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
 
-        <Children name="notes" type="notes"/>
-
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
         <Child name="steadyState" type="baseVoltageDepVariable" />
@@ -415,8 +409,6 @@
     <ComponentType name="gateHHratesTauInf"
                    extends="gate"
                    description="Gate which follows the general Hodgkin Huxley formalism">
-
-        <Children name="notes" type="notes"/>
 
         <Child name="forwardRate" type="baseVoltageDepRate"/>
         <Child name="reverseRate" type="baseVoltageDepRate"/>
@@ -472,11 +464,12 @@
     <ComponentType name="subGate"
                    description="Gate composed of subgates contributing with fractional conductance">
 
+        <Parameter name="fractionalConductance" dimension="none"/>
+
         <Child name="notes" type="notes"/>
 
         <Child name="timeCourse" type="baseVoltageDepTime" />
         <Child name="steadyState" type="baseVoltageDepVariable" />
-        <Parameter name="fractionalConductance" dimension="none"/>
 
         <Exposure name="tau" dimension="time"/>
         <Exposure name="inf" dimension="none"/>
@@ -496,22 +489,28 @@
             </OnStart>
         </Dynamics>
     </ComponentType>
+
+
     <ComponentType name="baseIonChannel"
                    description="Base for all ion channel ComponentTypes">
+
         <Parameter name="conductance" dimension="conductance"/>
+
+        <Child name="notes" type="notes"/>
+        <Child name="annotation" type="annotation"/>
+
         <Exposure name="g" dimension="conductance"/>
         <Exposure name="fopen" dimension="none"/>
         <Requirement name="v" dimension="voltage"/>
 
+        <Text name="neuroLexId"/>
+
     </ComponentType>
 
 
-    <ComponentType name="ionChannelPassive"
+    <ComponentType name="ionChannelPassive" 
                    extends="ionChannel"
                    description="Simple passive ion channel where the constant conductance through the channel is equal to _conductance">
-        <Children name="notes" type="notes"/>
-        <Children name="annotation" type="annotation"/>
-        <Text name="neuroLexId"/>
 
         <Dynamics>
             <DerivedVariable name="fopen" exposure="fopen" value="1" dimension="none"/>
@@ -520,16 +519,13 @@
     </ComponentType>
 
 
-    <ComponentType name="ionChannelHH"
+    <ComponentType name="ionChannelHH" 
                    extends="baseIonChannel"
                    description="Note _ionChannel_ and _ionChannelHH_ are currently functionally identical. This is needed since many existing examples use ionChannel, some use ionChannelHH. NeuroML v2beta4 should remove one of these, probably ionChannelHH.">
-        <Children name="notes" type="notes"/>
-        <Children name="annotation" type="annotation"/>
 
         <Children name="conductanceScaling" type="baseConductanceScaling"/>
         <Children name="gates" type="gate"/>
 
-        <Text name="neuroLexId"/>
         <Text name="species"/>
 
         <Dynamics>
@@ -558,7 +554,7 @@
     <ComponentType name="KSState"
                    description="One of the states in which a _gateKS_ can be. The rates of transitions between these states are given by _KSTransition_s">
         <Parameter name="relativeConductance" dimension="none"/>
-        <Children name="notes" type="notes"/>
+
         <Exposure name="occupancy" dimension="none"/>
         <Exposure name="q" dimension="none"/>
 
@@ -569,29 +565,31 @@
     </ComponentType>
 
 
-    <ComponentType name="closedState"
+    <ComponentType name="closedState" 
                    extends="KSState"
                    description="A _KSState_ with _relativeConductance of 0">
         <Fixed parameter="relativeConductance" value="0"/>
     </ComponentType>
 
 
-    <ComponentType name="openState"
+    <ComponentType name="openState" 
                    extends="KSState"
                    description="A _KSState_ with _relativeConductance of 1">
         <Fixed parameter="relativeConductance" value="1"/>
     </ComponentType>
 
 
-    <ComponentType name="ionChannelKS"
-                   extends="ionChannel"
+    <ComponentType name="ionChannelKS" 
+                   extends="baseIonChannel"
                    description="A kinetic scheme based ion channel with multiple _gateKS_s, each of which consists of multiple _KSState_s and _KSTransition_s giving the rates of transition between them">
-        <Children name="gatesKS" type="gateKS"/>
+
+        <Children name="conductanceScaling" type="baseConductanceScaling"/>
+        <Children name="gates" type="gateKS"/>
 
         <Text name="species"/>
 
         <Dynamics>
-            <DerivedVariable name="fopen" exposure="fopen" dimension="none" select="gatesKS[*]/fcond" reduce="multiply"/>
+            <DerivedVariable name="fopen" exposure="fopen" dimension="none" select="gates[*]/fcond" reduce="multiply"/>
             <DerivedVariable name="g" exposure="g" dimension="conductance" value="fopen * conductance"/>
 
         </Dynamics>
@@ -626,7 +624,7 @@
     </ComponentType>
 
 
-    <ComponentType name="reverseTransition"
+    <ComponentType name="reverseTransition" 
                    extends="KSTransition"
                    description="A reverse only _KSTransition_ for a _gateKS_ which specifies a _rate (type _baseHHRate_) which follows one of the standard Hodgkin Huxley forms (e.g. _HHExpRate_, _HHSigmoidRate_, _HHExpLinearRate_">
 
