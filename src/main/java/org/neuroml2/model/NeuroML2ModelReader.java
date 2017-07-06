@@ -47,6 +47,7 @@ public class NeuroML2ModelReader {
             if (f.equals("NeuroML2CoreTypes.xml"))
                 coreTypes = fout;
             OutputStream out = new FileOutputStream(fout);
+            System.out.println("Saving to: "+fout.getAbsolutePath()+" for "+f);
             int read;
             byte[] bytes = new byte[1024];
             while ((read = input.read(bytes)) != -1) {
