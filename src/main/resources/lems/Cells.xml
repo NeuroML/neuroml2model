@@ -586,8 +586,8 @@
             <!--<DerivedVariable name="surfaceArea" dimension="area" exposure="surfaceArea" value = "4 * radDist * radDist * 3.14159265" valueCondition="length .eq. 0" valueIfFalse = "2 * radDist * 3.14159265 * length"/>-->
 
 			<ConditionalDerivedVariable name="surfaceArea" dimension="area" exposure="surfaceArea">
-            	<Case condition="length .eq. 0" value="4 * radDist * radDist * 3.14159265"/>
-				<Case condition="length .gt. 0" value="2 * radDist * 3.14159265 * length"/>
+            	<Case condition="length .eq. 0 * LEN" value="4 * radDist * radDist * 3.14159265"/>
+				<Case condition="length .gt. 0 * LEN" value="2 * radDist * 3.14159265 * length"/>
 			</ConditionalDerivedVariable>
 
         </Dynamics>
