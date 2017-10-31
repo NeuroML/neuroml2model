@@ -28,12 +28,26 @@ public class ChannelTest {
 	public void setUp() throws Throwable {
         NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
         
-		hh = nmlReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
+		hh = nmlReader.read_(getLocalFile("/NML2_SingleCompHHCell.nml"));
 		ih = nmlReader.read_(getLocalFile("/Ih.channel.nml"));
 		calva = nmlReader.read_(getLocalFile("/Ca_LVAst.channel.nml"));
 		kdr = nmlReader.read_(getLocalFile("/kdr.channel.nml"));
+		kdr = nmlReader.read_(getLocalFile("/Gran_H_98.channel.nml"));
 	
 	}
+    
+	@Test
+	public void testChannelExtracts() throws Throwable {
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/NML2_SingleCompHHCell.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Ih.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_KA_98.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_KCa_98.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_KDr_98.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_NaF_98.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/NaTa.channel.nml")));
+        
+    }
+    
 
 	@Test
 	public void testChannels() throws Throwable {

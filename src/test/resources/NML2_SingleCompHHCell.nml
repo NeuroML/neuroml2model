@@ -1,9 +1,9 @@
 <neuroml2>
 
     <!-- Single compartment cell with HH channels -->
-
-    <!-- This is a "pure" NeuroML 2 file. It can be included in a LEMS file for use in a simulaton
-    by the LEMS interpreter, see LEMS_NML2_Ex5_DetCell.xml -->
+     
+    <!-- This is a "pure" NeuroML 2 file. It can be included in a LEMS file for use in a simulaton 
+    by the LEMS interpreter, see LEMS_NML2_Ex5_DetCell.xml -->     
 
     <ionChannelHH id="passiveChan" conductance="10pS">
         <notes>Leak conductance</notes>
@@ -32,7 +32,7 @@
             <forwardRate type="HHExpLinearRate" rate="0.1per_ms" midpoint="-55mV" scale="10mV"/>
             <reverseRate type="HHExpRate" rate="0.125per_ms" midpoint="-65mV" scale="-80mV"/>
         </gateHHrates>
-
+            
     </ionChannelHH>
 
 
@@ -41,7 +41,7 @@
 
         <morphology id="morph1">
             <segment id="0" name="soma">
-                <proximal x="0" y="0" z="0" diameter="17.841242"/> <!--Gives a convenient surface area of 1000.0 ?m�-->
+                <proximal x="0" y="0" z="0" diameter="17.841242"/> <!--Gives a convenient surface area of 1000.0 um^2-->
                 <distal x="0" y="0" z="0" diameter="17.841242"/>
             </segment>
 
@@ -54,8 +54,8 @@
         <biophysicalProperties id="bioPhys1">
 
             <membraneProperties>
-
-                <channelDensity id="leak" ionChannel="passiveChan" condDensity="3.0 S_per_m2" erev="-54.3mV"/>
+                        
+                <channelDensity id="leak" ionChannel="passiveChan" condDensity="3.0 S_per_m2" erev="-54.3mV" ion="non_specific"/>
                 <channelDensity id="naChans" ionChannel="naChan" condDensity="120.0 mS_per_cm2" erev="50.0 mV" ion="na"/>
                 <channelDensity id="kChans" ionChannel="kChan" condDensity="360 S_per_m2" erev="-77mV" ion="k"/>
 

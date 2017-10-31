@@ -15,3 +15,9 @@ hs_err_pid*
 
 .DS_Store
 /target/
+/src/test/resources/Ca_LVAst.channel_transformed.xml
+/src/test/resources/Ca_LVAst.channel_transformed_transformed.xml
+/status.sh
+/regen.sh
+/cleanlems2.sh
+/src/main/java/META-INF/MANIFEST.MF

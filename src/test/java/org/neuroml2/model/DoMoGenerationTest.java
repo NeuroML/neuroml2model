@@ -71,7 +71,7 @@ public class DoMoGenerationTest {
 	public void testAPI() throws Throwable {
         NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
 
-		Neuroml2 hh2 = nmlReader.read(getLocalFile("/NML2_SingleCompHHCell.nml"));
+		Neuroml2 hh2 = nmlReader.read_(getLocalFile("/NML2_SingleCompHHCell.nml"));
 		assertEquals(hh.getCells().size(), hh2.getCells().size());
 	}
 
@@ -173,7 +173,7 @@ public class DoMoGenerationTest {
 		eraseDeReferences(hh);// TODO: extremely ugly hack
 
 		marshaller.marshal(hh, tmpFile);
-		System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
+		//System.out.println(Files.toString(tmpFile, Charsets.UTF_8));
 	}
 
 	private void eraseDeReferences(HasComponents comp) {
