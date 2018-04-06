@@ -64,7 +64,7 @@ public class DoMoGenerationTest {
 	@Test
 	public void testGeneration() {
 
-		assertEquals(212, domainDefs.getComponentTypes().size());
+		assertEquals(215, domainDefs.getComponentTypes().size());
 	}
 
 	@Test

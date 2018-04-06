@@ -168,7 +168,15 @@ public class NeuroML2ModelReader
         model.getUnits().addAll(domainDefs.getUnits());
         model.getConstants().addAll(domainDefs.getConstants());
         model.getDimensions().addAll(domainDefs.getDimensions());
-        new LEMSSemanticAnalyser(model).analyse();
+        try
+        {
+            new LEMSSemanticAnalyser(model).analyse();
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+            throw new Exception("Error with LEMSSemanticAnalyser...", e);
+        }
 
         return model;
 
@@ -283,7 +291,7 @@ public class NeuroML2ModelReader
         //ionChannelFile = "src/test/resources/kdr.channel.nml";
         //ionChannelFile = "../../geppetto/org.geppetto.model.neuroml/src/test/resources/traub/k2.channel.nml";
         //ionChannelFile = "../../geppetto/org.geppetto.model.neuroml/src/test/resources/hhcell/NML2_SingleCompHHCell.nml";
-        //ionChannelFile = "/tmp/NeuroML_456530365697517062.tmp";
+        ionChannelFile = "/tmp/NeuroML_8507741234722354669.tmp";
 
         if (args.length == 1)
         {

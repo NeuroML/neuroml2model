@@ -9,4 +9,7 @@
             <reverseRate type="HHExpRate" rate="0.66per_s" midpoint="-49.9mV" scale="-11.4mV"/>
         </gateHHrates>
     </ionChannelHH>
+    
+    <!--<gapJunction conductance="0.5nS" id="rod_rod_gap"/>--> 
+    
 </neuroml>

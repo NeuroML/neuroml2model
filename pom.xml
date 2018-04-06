@@ -6,7 +6,7 @@
 	<packaging>bundle</packaging>
 	<groupId>org.neuroml.neuroml2-model</groupId>
 	<artifactId>org.neuroml.neuroml2-model</artifactId>
-	<version>0.0.7</version>
+	<version>0.0.8</version>
 
 	<dependencies>
 		<dependency>

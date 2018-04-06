@@ -46,7 +46,6 @@ public class ChannelTest {
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_KDr_98.channel.nml")));
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_NaF_98.channel.nml")));
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/NaTa.channel.nml")));
-        System.out.println("5555");
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/kx_rod.channel.nml")));
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/rods.nml")));
         
