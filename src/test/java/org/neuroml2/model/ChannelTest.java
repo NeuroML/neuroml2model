@@ -4,6 +4,7 @@ import com.google.common.collect.ImmutableMap;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Set;
 import javax.measure.Quantity;
 
@@ -13,13 +14,11 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.lemsml.model.extended.Scope;
 import tec.units.ri.quantity.Quantities;
+import static org.junit.Assert.assertEquals;
 
 public class ChannelTest {
 
-	private Neuroml2 hh;
-	private Neuroml2 calva;
-	private Neuroml2 ih;
-	private Neuroml2 kdr;
+	private ArrayList<Neuroml2> channelDocs = new ArrayList();
 
 	@Rule
 	public ExpectedException thrown = ExpectedException.none();
@@ -28,12 +27,13 @@ public class ChannelTest {
 	public void setUp() throws Throwable {
         NeuroML2ModelReader nmlReader = new NeuroML2ModelReader();
         
-		hh = nmlReader.read_(getLocalFile("/NML2_SingleCompHHCell.nml"));
-		ih = nmlReader.read_(getLocalFile("/Ih.channel.nml"));
-		calva = nmlReader.read_(getLocalFile("/Ca_LVAst.channel.nml"));
-		kdr = nmlReader.read_(getLocalFile("/kdr.channel.nml"));
-		kdr = nmlReader.read_(getLocalFile("/Gran_H_98.channel.nml"));
-		kdr = nmlReader.read_(getLocalFile("/k2.channel.nml"));
+		channelDocs.add(nmlReader.read_(getLocalFile("/NML2_SingleCompHHCell.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/Ih.channel.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/Ca_LVAst.channel.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/kdr.channel.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/Gran_H_98.channel.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/k2.channel.nml")));
+		channelDocs.add(nmlReader.read_(getLocalFile("/kx_rod.channel.nml")));
 	
 	}
     
@@ -46,17 +46,18 @@ public class ChannelTest {
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_KDr_98.channel.nml")));
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/Gran_NaF_98.channel.nml")));
         System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/NaTa.channel.nml")));
+        System.out.println("5555");
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/kx_rod.channel.nml")));
+        System.out.println(NeuroML2ModelReader.extractInfo(getLocalFile("/rods.nml")));
         
     }
     
-
+/*
 	@Test
 	public void testChannels() throws Throwable {
-		assertEquals(hh.getCells().size(),1);
+		assertEquals(channelDocs.get(0).getCells().size(),1);
         
-        Neuroml2[] nmlDocs = new Neuroml2[]{hh,ih,calva,kdr};
-        
-        for (Neuroml2 nmlDoc: nmlDocs)
+        for (Neuroml2 nmlDoc: channelDocs)
         {
             Set<BaseIonChannel> ics = nmlDoc.getAllOfType(BaseIonChannel.class);
             
@@ -97,11 +98,11 @@ public class ChannelTest {
                 }
             }
         }
-	}
+	}*/
 
 	public ImmutableMap<String, Quantity<?>> getContext(String var, Double i, String unit) {
 		ImmutableMap<String, Quantity<?>> ctxt 
-            = new ImmutableMap.Builder<String, Quantity<?>>().put(var, Quantities.getQuantity(i, hh.getUnitBySymbol(unit))).build();
+            = new ImmutableMap.Builder<String, Quantity<?>>().put(var, Quantities.getQuantity(i, channelDocs.get(0).getUnitBySymbol(unit))).build();
 		return ctxt;
 	}
 
