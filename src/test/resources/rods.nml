@@ -10,6 +10,6 @@
         </gateHHrates>
     </ionChannelHH>
     
-    <!--<gapJunction conductance="0.5nS" id="rod_rod_gap"/>--> 
+    <gapJunction conductance="0.5nS" id="rod_rod_gap"/>
     
 </neuroml>
