@@ -33,6 +33,7 @@ public class ChannelTest {
 		calva = nmlReader.read_(getLocalFile("/Ca_LVAst.channel.nml"));
 		kdr = nmlReader.read_(getLocalFile("/kdr.channel.nml"));
 		kdr = nmlReader.read_(getLocalFile("/Gran_H_98.channel.nml"));
+		kdr = nmlReader.read_(getLocalFile("/k2.channel.nml"));
 	
 	}
     
