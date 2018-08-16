@@ -1,5 +1,4 @@
-dist: precise
-
+dist: trusty
 sudo: false
 
 language: java
@@ -9,10 +8,10 @@ before_install:
 - rm ~/.m2/settings.xml
 
 jdk:
-  # - openjdk6
-  # - openjdk7 temp
-  - oraclejdk7
+  - openjdk7
+  - openjdk8
   - oraclejdk8
+
 
 install:
     
